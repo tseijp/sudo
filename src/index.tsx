@@ -1,8 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
-import { ThemeProvider } from "styled-components";
 import { lighten, darken } from "polished";
-import { Grid, Box, Title, Wrap } from "./components";
+import { Grid, Box, Home, Navi } from "./components";
 import { useControls } from "leva";
 import $ from "./hooks";
 
@@ -20,6 +19,8 @@ const theme = {
   $radius: "2.5px",
   $margin: "100px",
   $gap: "0.15rem",
+  $title: "5rem",
+  $navi: "5rem",
   $size: "min(100vw, 100vh)"
 };
 
@@ -39,9 +40,13 @@ function App() {
   const bind = $({ pads });
 
   return (
-    <ThemeProvider theme={useControls(theme)}>
-      <Wrap>
-        <Title>SUDO</Title>
+    <Home theme={useControls(theme)}>
+      <Home.Style />
+      <Home.Wrap>
+        <Navi>
+          <Navi.Title>SUDO</Navi.Title>
+          {/* <Navi.Select/> */}
+        </Navi>
         <Grid $w="3" $h="3" $top>
           {range(3).map((j) =>
             range(3).map((i) => (
@@ -55,8 +60,8 @@ function App() {
             ))
           )}
         </Grid>
-      </Wrap>
-    </ThemeProvider>
+      </Home.Wrap>
+    </Home>
   );
 }
 
