@@ -1,13 +1,27 @@
-import { ReactNode, createElement as el } from "react";
+import { createElement as el } from "react";
 import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
+import { lighten, darken } from "polished";
+import { useControls } from "leva";
 
-export type HomeProps = {
-  theme: unknown;
-  children?: null | ReactNode;
+const theme = {
+  $dark: lighten(0.02, "#121214"),
+  $light: darken(0.02, "#ededeb"),
+  $primary: "#0087ff",
+  $steps: "10",
+  $radius: "2.5px",
+  $margin: "100px",
+  $gap: "0.15rem",
+  $title: "5rem",
+  $navi: "5rem",
+  $test: "1rem",
+  $size: "min(100vw, 100vh)",
+  $debug: false
 };
 
-export const Home = (props: HomeProps) => {
-  return el(ThemeProvider, props);
+export type ThemeProps = typeof theme;
+
+export const Home = <T>(props: T) => {
+  return el(ThemeProvider, { theme: useControls(theme), ...props });
 };
 
 Home.Wrap = styled.div`
@@ -30,7 +44,9 @@ Home.Wrap = styled.div`
   }
 `;
 
-Home.Style = createGlobalStyle`
+export type StyleProps = { theme: ThemeProps };
+
+Home.Style = createGlobalStyle<StyleProps>`
   html,
   body,
   #root {
@@ -38,12 +54,12 @@ Home.Style = createGlobalStyle`
     left: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
   }
 
   body {
     font-family: system-ui;
     margin: 0;
+    background: ${($) => lighten(0.02, $.theme.$dark)};
   }
 
   *,

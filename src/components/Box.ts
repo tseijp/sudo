@@ -1,16 +1,18 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export type BoxProps = Partial<{
   $i: string | number;
   $j: string | number;
-  $w: string | number;
-  $h: string | number;
+  $n: string | number;
+  $s: string | number;
 }>;
 
 export const Box = styled.div<BoxProps>`
   display: flex;
   border: initial;
   outline: none;
+  max-width: 100%;
+  max-height: 100%;
   text-align: center;
   align-items: center;
   user-select: none;
@@ -19,10 +21,11 @@ export const Box = styled.div<BoxProps>`
   justify-content: center;
   border-radius: ${($) => $.theme.$radius};
   background: ${($) => $.theme.$light};
-  font-size: ${($) => `calc((${$.theme.$size}) / ${$.$h} - ${$.theme.$gap})`};
-  height: ${($) => `calc((${$.theme.$size}) / ${$.$h} - 2 * ${$.theme.$gap})`};
-  width: ${($) => `calc((${$.theme.$size}) / ${$.$w} - 2 * ${$.theme.$gap})`};
+  font-size: ${($) => css`min(200%, 2rem)`};
   color: ${($) => $.theme.$dark};
   ${({ $j }) => $j && `grid-row: ${$j};`}
   ${({ $i }) => $i && `grid-column: ${$i};`};
+  ${($) =>
+    $.theme.debug &&
+    `background: ${"#" + ((Math.random() * 0xffffff) | 0).toString(16)};`};
 `;
