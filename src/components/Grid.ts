@@ -14,7 +14,7 @@ function repeat(
   length: string | number = 0,
   percentage: string | number = "1fr"
 ) {
-  if (!length || length + "" === "1") return percentage;
+  if (!length) return percentage;
   return `repeat(${length}, ${percentage})`;
 }
 
@@ -22,7 +22,7 @@ function topStyle($: GridProps) {
   if (!$.$top) return;
   return css`
     padding: calc(2 * ${$.theme.$gap});
-    /* 
+    /*
     // this css can not work(;_;)!
     width: ${$.theme.$size};
     height: ${$.theme.$size}; */

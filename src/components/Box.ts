@@ -11,8 +11,6 @@ export const Box = styled.div<BoxProps>`
   display: flex;
   border: initial;
   outline: none;
-  max-width: 100%;
-  max-height: 100%;
   text-align: center;
   align-items: center;
   user-select: none;

@@ -22,8 +22,8 @@ const pads = [
 ];
 
 function App() {
-  const bind = $({ pads });
   const n = 3;
+  const bind = $({ pads, n });
   return (
     <Home>
       <Home.Style />
