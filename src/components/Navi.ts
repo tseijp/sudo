@@ -6,7 +6,7 @@ export type _Navi = {
   Select: <T>(props: T) => null | JSX.Element;
 };
 
-export const Navi = (styled.div`
+export const Navi = styled.div`
   display: flex;
   text-align: center;
   align-items: start;
@@ -21,7 +21,7 @@ export const Navi = (styled.div`
   }
   /* background: ${() =>
     "#" + ((Math.random() * 0xffffff) | 0).toString(16)}; */
-` as unknown) as _Navi;
+` as unknown as _Navi;
 
 Navi.Title = styled.h1`
   margin: 0;
