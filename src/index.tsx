@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "react-dom";
-import { Grid, Box, Home, Navi } from "./components";
+import { Grid, Box, Home, Navi, Toggle } from "./components";
 import $ from "./hooks";
 
 function range(n = 0) {
@@ -22,28 +22,43 @@ const pads = [
 ];
 
 function App() {
-  const n = 3;
-  const bind = $({ pads, n });
+  const [n ,setN] = React.useState(4)
+  const [isNum, setIsNum] = React.useState(false)
+  const bind = $({ pads, n, isNum });
   return (
     <Home>
       <Home.Style />
       <Home.Wrap>
-        <Navi>
+        <Navi $top>
           <Navi.Title>SUDO</Navi.Title>
-          {/* <Navi.Select/> */}
+          <Navi.Wrap>
+            <Navi.Select
+              value={n}
+              onChange={(e) => setN(Number(e.target.value))}
+              children={range(9).map(i => <option key={i}>{i}</option>)}
+            />
+            <Toggle
+              leftIcon="🔢"
+              rightIcon="🔡"
+              checked={isNum}
+              onChange={(e) => setIsNum(e.target.checked)}
+            />
+          </Navi.Wrap>
         </Navi>
         <Grid $n={n} $top>
-          {range(n).map((j) =>
-            range(n).map((i) => (
-              <Grid $n={n} key={i << j}>
-                {range(n).map((jj) =>
-                  range(n).map((ii) => (
-                    <Box $n={n * n} key={ii << jj} {...bind(i, j, ii, jj)} />
-                  ))
-                )}
-              </Grid>
-            ))
-          )}
+          {React.useMemo(() =>
+            range(n).map((j) =>
+              range(n).map((i) => (
+                <Grid $n={n} key={i << j}>
+                  {range(n).map((jj) =>
+                    range(n).map((ii) => (
+                      <Box key={ii << jj} {...bind(i + j * n, ii + jj * n)}/>
+                    ))
+                  )}
+                </Grid>
+              ))
+            )
+          , [n, bind])}
         </Grid>
       </Home.Wrap>
     </Home>
