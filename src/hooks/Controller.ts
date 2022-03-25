@@ -63,6 +63,6 @@ export class Controller {
   }
 
   each(fun = (_: number) => {}) {
-    for (let i = 0, nn = this.state.n; i < nn; i++) fun(i);
+    for (let i = 0, nn = this.state.nn; i < nn; i++) fun(i);
   }
 }
