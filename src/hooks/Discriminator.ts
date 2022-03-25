@@ -1,5 +1,4 @@
 import type { Controller } from "./Controller";
-import { m2kl, kl2m, ij2m, m2ij } from "./utils";
 
 export class Discriminator {
   /*
@@ -19,11 +18,19 @@ export class Discriminator {
   }
 
   effect() {
-    return () => {};
+    // console.log(this._m)
+    // console.log(this._0)
+    // console.log(this._1)
+    // console.log(this._2)
+  }
+
+  clear() {
+    this._m.clear();
+    [this._0, this._1, this._2] = [[], [], []]
   }
 
   get(k = 0, l = -1, m = k) {
-    if (!!~l) m = this._kl2m(k, l); // l was not -1 and existing
+    if (!!~l) m = this._ctrl.kl2m(k, l); // l was not -1 and existing
     return this._m.get(m);
   }
 
@@ -34,15 +41,19 @@ export class Discriminator {
 
   set(x = "1", ...args: [k: number, l: number] | [m: number]) {
     const [i, j, k, , m] = this._klm2(...args);
-    if(x) this._m.set(m, x);
-    return [this.col(i), this.row(j), this.grid(k)].map(_ => _.add(x));
+    if(!this.has(x, ...args)) {
+      this._m.set(m, x);
+      void [this.col(i), this.row(j), this.grid(k)].map(_ => _.add(x));
+    }
   }
 
   del(...args: [k: number, l: number] | [m: number]) {
     const [i, j, k, , m] = this._klm2(...args);
     const x = this._m.get(m)!;
-    if(x) this._m.delete(m);
-    return [this.col(i), this.row(j), this.grid(k)].map(_ => _.delete(x));
+    if(this.has(x, ...args)) {
+      this._m.delete(m)
+      void [this.col(i), this.row(j), this.grid(k)].map(_ => _.delete(x));
+    }
   }
 
   has(x = "1", ...args: [k: number, l: number] | [m: number]) {
@@ -52,18 +63,18 @@ export class Discriminator {
   }
 
   col(k = 0 , l = -1, i = k) {
-    if(!!~l) i = this._m2ij(this._kl2m(k, l))[0]; // l was not -1 and existing
-    return this._0[i] = this._0[i] || this._create((j) => this._ij2m(i, j));
+    if(!!~l) i = this._ctrl.m2ij(this._ctrl.kl2m(k, l))[0]; // l was not -1 and existing
+    return this._0[i] = this._0[i] ?? this._create((j) => this._ctrl.ij2m(i, j));
   }
 
   row(k = 0, l = -1, j = k) {
-    if(!!~l) j = this._m2ij(this._kl2m(k, l))[1]; // l was not -1 and existing
-    return this._1[j] = this._1[j] || this._create((i) => this._ij2m(i, j));
+    if(!!~l) j = this._ctrl.m2ij(this._ctrl.kl2m(k, l))[1]; // l was not -1 and existing
+    return this._1[j] = this._1[j] ?? this._create((i) => this._ctrl.ij2m(i, j));
   }
 
   grid(i = 0, j = -1, k = i) {
-    if (!!~j) [k] = this._m2kl(this._ij2m(i, j)); // j was not -1 and existing
-    return this._2[k] = this._2[k] || this._create((l) => this._kl2m(k, l));
+    if (!!~j) [k] = this._ctrl.m2kl(this._ctrl.ij2m(i, j)); // j was not -1 and existing
+    return this._2[k] = this._2[k] ?? this._create((l) => this._ctrl.kl2m(k, l));
   }
 
   private _create(fun = (i = 0) => i) {
@@ -73,37 +84,10 @@ export class Discriminator {
   }
 
   private _klm2(k = 0, l = -1, m = k) {
-    if (!!~l) m = this._kl2m(k, l); // j was not -1 and existing
-    else [k, l] = this._m2kl(m)     // j was -1 and not existing
-    const [i, j] = this._m2ij(m)
+    if (!!~l) m = this._ctrl.kl2m(k, l); // l was not -1 and existing
+    else [k, l] = this._ctrl.m2kl(m)     // l was -1 and not existing
+    const [i, j] = this._ctrl.m2ij(m)
+    console.log([i, j, k, l, m])
     return [i, j, k, l, m]
-  }
-
-  /**
-   * @TODO using wasm
-   */
-  private _m2kl(m = 0) {
-    return m2kl(m, this.state.n, this.state.nn);
-  }
-
-  private _m2ij(m = 0) {
-    return m2ij(m, this.state.n, this.state.nn, this.state.nnn);
-  }
-
-  private _kl2m(k = 0, l = 0) {
-    return kl2m(k, l, this.state.n, this.state.nn);
-  }
-
-  private _ij2m(i = 0, j = 0) {
-    return ij2m(i, j, this.state.n, this.state.nn, this.state.nnn);
-  }
-
-
-  get props() {
-    return this._ctrl.props;
-  }
-
-  get state() {
-    return this._ctrl.state;
   }
 }

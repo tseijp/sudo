@@ -22,8 +22,8 @@ const pads = [
 ];
 
 function App() {
-  const [n ,setN] = React.useState(4)
-  const [isNum, setIsNum] = React.useState(false)
+  const [n, setN] = React.useState(2);
+  const [isNum, setIsNum] = React.useState(false);
   const bind = $({ pads, n, isNum });
   return (
     <Home>
@@ -35,7 +35,9 @@ function App() {
             <Navi.Select
               value={n}
               onChange={(e) => setN(Number(e.target.value))}
-              children={range(9).map(i => <option key={i}>{i}</option>)}
+              children={range(9).map((i) => (
+                <option key={i}>{i}</option>
+              ))}
             />
             <Toggle
               leftIcon="🔢"
@@ -46,19 +48,21 @@ function App() {
           </Navi.Wrap>
         </Navi>
         <Grid $n={n} $top>
-          {React.useMemo(() =>
-            range(n).map((j) =>
-              range(n).map((i) => (
-                <Grid $n={n} key={i << j}>
-                  {range(n).map((jj) =>
-                    range(n).map((ii) => (
-                      <Box key={ii << jj} {...bind(i + j * n, ii + jj * n)}/>
-                    ))
-                  )}
-                </Grid>
-              ))
-            )
-          , [n, bind])}
+          {React.useMemo(
+            () =>
+              range(n).map((j) =>
+                range(n).map((i) => (
+                  <Grid $n={n} key={i << j}>
+                    {range(n).map((jj) =>
+                      range(n).map((ii) => (
+                        <Box key={ii << jj} {...bind(i + j * n, ii + jj * n)} />
+                      ))
+                    )}
+                  </Grid>
+                ))
+              ),
+            [n, bind]
+          )}
         </Grid>
       </Home.Wrap>
     </Home>
