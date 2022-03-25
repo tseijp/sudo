@@ -22,7 +22,7 @@ const pads = [
 ];
 
 function App() {
-  const [n, setN] = React.useState(2);
+  const [n, setN] = React.useState(4);
   const [isNum, setIsNum] = React.useState(false);
   const bind = $({ pads, n, isNum });
   return (
