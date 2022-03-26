@@ -1,0 +1,29 @@
+ 
+ ​version​: ​2 
+ ​updates​: 
+ ​  - ​package-ecosystem​: ​github-actions 
+ ​    ​directory​: ​'​/​' 
+ ​    ​schedule​: 
+ ​      ​interval​: ​weekly 
+ ​    ​open-pull-requests-limit​: ​99 
+ ​  - ​package-ecosystem​: ​npm 
+ ​    ​directory​: ​'​/​' 
+ ​    ​schedule​: 
+ ​      ​interval​: ​monthly 
+ ​    ​open-pull-requests-limit​: ​99 
+ ​  - ​package-ecosystem​: ​"​docker​" 
+ ​    ​directory​: ​"​/​" 
+ ​    ​schedule​: 
+ ​      ​interval​: ​"​daily​" 
+ ​  - ​package-ecosystem​: ​"​gitsubmodule​" 
+ ​    ​directory​: ​"​/articles/​" 
+ ​    ​schedule​: 
+ ​      ​interval​: ​"​daily​" 
+ ​  - ​package-ecosystem​: ​"​gitsubmodule​" 
+ ​    ​directory​: ​"​/examples/​" 
+ ​    ​schedule​: 
+ ​      ​interval​: ​"​daily​" 
+ ​  - ​package-ecosystem​: ​"​gitsubmodule​" 
+ ​    ​directory​: ​"​/packages/​" 
+ ​    ​schedule​: 
+ ​      ​interval​: ​"​daily​"
