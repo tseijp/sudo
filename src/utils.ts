@@ -10,5 +10,11 @@ export function m2kl(m = 0, n = 3, nn = n * n) {
 }
 
 export function m2ij(m = 0, n = 3, nn = n * n, nnn = nn * n) {
-  return [(~~(m / nn) % n * n) + (m % n), ~~(m / nnn) * n + ~~(m / n) % n];
+  return [(~~(m / nn) % n) * n + (m % n), ~~(m / nnn) * n + (~~(m / n) % n)];
+}
+
+export function range(n = 0) {
+  const ret = new Array(n);
+  for (; n--; ) ret[n] = n;
+  return ret;
 }
