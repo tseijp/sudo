@@ -9,7 +9,7 @@ export type BoxProps = Partial<{
   id: string;
   type: string;
   children: ReactNode;
-  onChange: (e: Event) => void;
+  onChange: (e: any) => void;
 }>;
 
 export function Box<T>(props: T & BoxProps) {
@@ -17,11 +17,7 @@ export function Box<T>(props: T & BoxProps) {
   return el(Box.Wrap, props, children !== "0" && children);
 }
 
-function useBoxWrapAttrs(props: BoxProps) {
-  return props;
-}
-
-Box.Wrap = styled.div.attrs(useBoxWrapAttrs)<BoxProps>`
+Box.Wrap = styled.div<BoxProps>`
   display: flex;
   border: initial;
   outline: none;

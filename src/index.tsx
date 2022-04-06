@@ -17,7 +17,7 @@ const pads = [
 ];
 
 function App() {
-  const [n, setN] = React.useState(2);
+  const [n, setN] = React.useState(4);
   const [isNum, setIsNum] = React.useState(false);
   const bind = $({ pads, n, isNum });
   return (
@@ -52,6 +52,17 @@ function App() {
             </Grid>
           )}
         </Grid>
+        <Navi>
+          <Grid $n={n} $one>
+            {(i) => (
+              <Grid $n={n} key={i} $one>
+                {(ii) => (
+                  <Box key={ii} />
+                )}
+              </Grid>
+            )}
+          </Grid>
+        </Navi>
       </Home.Wrap>
     </Home>
   );

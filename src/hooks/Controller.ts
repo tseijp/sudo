@@ -1,6 +1,6 @@
 import { Generator } from "./Generator";
 import { Discriminator } from "./Discriminator";
-import { m2kl, kl2m, ij2m, m2ij, range } from "../utils";
+import { m2kl, kl2m, ij2m, m2ij } from "../utils";
 
 export type Props = {
   isNum: boolean;
@@ -57,7 +57,7 @@ export class Controller {
   }
 
   bind(...args:[k: number, l: number] | [m: number]) {
-    const { state: $, discr } = this;
+    const { discr } = this;
     const props: any = {};
     props.children = this.discr.get(...args);
     props.value = this.discr.get(...args);
