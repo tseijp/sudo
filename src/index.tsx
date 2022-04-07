@@ -1,6 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
-import { Grid, Box, Home, Navi, Toggle } from "./components";
+import { lighten, darken } from "polished";
+import { Grid, Box, Home, Nav, Toggle } from "./components";
 import { range } from "./utils";
 import $ from "./hooks";
 
@@ -21,28 +22,47 @@ function App() {
   const [isNum, setIsNum] = React.useState(false);
   const bind = $({ pads, n, isNum });
   return (
-    <Home>
+    <Home
+      $dark={lighten(0.02, "#121214")}
+      $light={darken(0.02, "#ededeb")}
+      $aspect={`min-aspect-ratio: ${n*n+2}/${n*n}`}
+      $primary="#0087ff"
+      $steps="10"
+      $radius="2.5px"
+      $margin="100px"
+      $title="min(10vw, 10vh)"
+      $test="1rem"
+      $nav="1rem"
+      $gap="0.15rem"
+      $size="min(100vw, 100vh)"
+      $font={`calc(min(100vw, 100vh) / ${2*n*n})`}
+      $debug={false}
+    >
       <Home.Style />
       <Home.Wrap>
-        <Navi $top>
-          <Navi.Title>SUDO</Navi.Title>
-          <Navi.Wrap>
-            <Navi.Select
-              value={n}
-              onChange={(e) => setN(Number(e.target.value))}
-              children={range(6).map((i) => (
-                <option key={i}>{i}</option>
-              ))}
-            />
-            <Box $to={7}>{n}</Box>
-            <Toggle
-              leftIcon="🔢"
-              rightIcon="🔡"
-              checked={isNum}
-              onChange={(e) => setIsNum(e.target.checked)}
-            />
-          </Navi.Wrap>
-        </Navi>
+        <Grid $n={n} $one $left $top $nav>
+          {range(n*(n-1)).map((i) => <div key={i}/>)}
+          <Nav $n={n}>
+            <Nav.Title>SUDO</Nav.Title>
+          </Nav>
+          <Nav $n={n}>
+            <Nav.Other>
+              <Nav.Select
+                value={n}
+                onChange={(e) => setN(Number(e.target.value))}
+                children={range(7).map((i) => (
+                  <option key={i}>{i}</option>
+                ))}
+              />
+              <Toggle
+                leftIcon="🔢"
+                rightIcon="🔡"
+                checked={isNum}
+                onChange={(e) => setIsNum(e.target.checked)}
+              />
+            </Nav.Other>
+          </Nav>
+        </Grid>
         <Grid $n={n} $top>
           {(i, j) => (
             <Grid $n={n} key={i << j}>
@@ -52,17 +72,15 @@ function App() {
             </Grid>
           )}
         </Grid>
-        <Navi>
-          <Grid $n={n} $one>
-            {(i) => (
-              <Grid $n={n} key={i} $one>
-                {(ii) => (
-                  <Box key={ii} />
-                )}
-              </Grid>
-            )}
-          </Grid>
-        </Navi>
+        <Grid $n={n} $one $right $top>
+          {(i) => (
+            <Grid $n={n} key={i} $one $right>
+              {(ii) => (
+                <Box key={ii} children={(i*n+ii).toString(n*n)}/>
+              )}
+            </Grid>
+          )}
+        </Grid>
       </Home.Wrap>
     </Home>
   );

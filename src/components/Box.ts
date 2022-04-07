@@ -1,5 +1,6 @@
 import { ReactNode, createElement as el } from "react";
 import styled from "styled-components";
+import { debugStyle } from "./Home";
 
 export type BoxProps = Partial<{
   $i: string | number;
@@ -23,19 +24,18 @@ Box.Wrap = styled.div<BoxProps>`
   outline: none;
   text-align: center;
   align-items: center;
+  overflow: hidden;
   user-select: none;
   text-overflow: ellipsis;
   vertical-align: middle;
   justify-content: center;
-  font-size: 2rem;
+  font-size: ${($) => $.theme.$font};
   border-radius: ${($) => $.theme.$radius};
   background: ${($) => $.theme.$light};
   color: ${($) => $.theme.$dark};
-  ${({ $j }) => $j && `grid-row: ${$j};`}
-  ${({ $i }) => $i && `grid-column: ${$i};`};
-  ${($) =>
-    $.theme.debug &&
-    `background: ${"#" + ((Math.random() * 0xffffff) | 0).toString(16)};`};
+  ${($) => $.$j && `grid-row: ${$.$j};`}
+  ${($) => $.$i && `grid-column: ${$.$i};`}
+  ${debugStyle}
 `;
 
 Box.Select = styled.div``;

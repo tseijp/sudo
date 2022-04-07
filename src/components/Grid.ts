@@ -1,6 +1,6 @@
-import { useMemo, useEffect, useRef, ReactNode, createElement as el } from "react";
+import { ReactNode, createElement as el } from "react";
 import styled, { css } from "styled-components";
-import { ThemeProps } from "./Home";
+import { ThemeProps, debugStyle } from "./Home";
 import { range } from "../utils";
 
 export type GridProps = Partial<{
@@ -9,20 +9,22 @@ export type GridProps = Partial<{
   $n: string | number;
   $w: string | number;
   $h: string | number;
+  $nav: boolean;
   $top: boolean;
   $one: boolean;
-  children: (i: number, j: number) => ReactNode;
+  $left: boolean;
+  $right: boolean;
+  children: ReactNode | ((i: number, j: number) => ReactNode);
 }>;
 
 export function Grid(props: GridProps) {
-  const { $n, $one=false, children=() => '' } = props;
-  const ref = useRef(children);
-  useEffect(() => void (ref.current = children));
-  return el(Grid.Wrap, props, useMemo(() => {
-    const n = Number($n);
-    if ($one) return range(n).map(i => ref.current(i, 0));
-    return range(n).map(j => range(n).map(i => ref.current(i, j)));
-  }, [$n, $one]));
+  const { $n, $nav, $one, children=() => ''} = props;
+  const toFun = <T>(v: T) => typeof v === "function"? v: (..._: any) => v
+  const n = Number($n);
+  return el(Grid.Wrap, props, $nav? children: $one
+      ? range(n).map(i => toFun(children)(i, -1))
+      : range(n).map(j => range(n).map(i => toFun(children)(i, j)))
+  );
 }
 
 function repeat(
@@ -36,30 +38,37 @@ function repeat(
 function topStyle($: GridProps & { theme: ThemeProps }) {
   if (!$.$top) return;
   return css`
-    padding: calc(2 * ${$.theme.$gap});
-    /*
-    // this css can not work(;_;)!
-    width: ${$.theme.$size};
-    height: ${$.theme.$size}; */
+    /**
+     * can not work using width and height key
+    */
     min-width: ${$.theme.$size};
     max-width: ${$.theme.$size};
     min-height: ${$.theme.$size};
     max-height: ${$.theme.$size};
+    padding: calc(2 * ${$.theme.$gap});
   `;
+}
+
+function oneStyle($: GridProps & { theme: ThemeProps }) {
+  if (!$.$one) return;
+  return css`
+    background: none;
+    @media screen and (${($) => $.theme.$aspect}) {
+      grid-auto-flow: column;
+    }
+  `
 }
 
 Grid.Wrap = styled.div<GridProps & { theme?: ThemeProps }>`
   display: grid;
-  max-width: 100%;
-  max-height: 100%;
-  border-radius: ${($) => $.theme.$radius};
   padding: ${($) => $.theme.$gap};
   grid-gap: ${($) => $.theme.$gap};
   background: ${($) => $.theme.$dark};
-  /* background: ${() =>
-    "#" + ((Math.random() * 0xffffff) | 0).toString(16)}; */
+  border-radius: ${($) => $.theme.$radius};
   grid-auto-rows: 1fr;
+  ${oneStyle}
+  ${topStyle}
+  ${debugStyle}
   ${($) => `grid-template-rows: ${repeat($.$n, $.$j)};`}
   ${($) => `grid-template-columns: ${repeat($.$n, $.$i)};`}
-  ${topStyle}
 `;
