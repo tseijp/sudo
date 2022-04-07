@@ -56,6 +56,12 @@ export class Discriminator {
     }
   }
 
+  items (...args: [k: number, l: number] | [m: number]) {
+    const ret: number[] = []
+    this._ctrl.each((x) => !this.has(x+"", ...args) && ret.push(x));
+    return ret
+  }
+
   has(x = "1", ...args: [k: number, l: number] | [m: number]) {
     let [i, j, k, , m] = this._klm2(...args);
     if (this._m.get(m) === x) return true;
@@ -87,7 +93,6 @@ export class Discriminator {
     if (!!~l) m = this._ctrl.kl2m(k, l); // l was not -1 and existing
     else [k, l] = this._ctrl.m2kl(m)     // l was -1 and not existing
     const [i, j] = this._ctrl.m2ij(m)
-    console.log([i, j, k, l, m])
     return [i, j, k, l, m]
   }
 }
