@@ -18,32 +18,43 @@ const pads = [
 ];
 
 function App() {
+  const [x, setX] = React.useState("");
+  const [m, setM] = React.useState(-1);
   const [n, setN] = React.useState(4);
   const [isNum, setIsNum] = React.useState(false);
-  const bind = $({ pads, n, isNum });
+  const [isDark, setIsDark] = React.useState(true);
+  const [isDebug, setIsDebug] = React.useState(false);
+  const bind = $({ pads, isNum, x, m, n, setM, setN, setX });
   return (
     <Home
-      $dark={lighten(0.02, "#121214")}
-      $light={darken(0.02, "#ededeb")}
-      $aspect={`min-aspect-ratio: ${n*n+2}/${n*n}`}
+      $isNum={isNum}
+      $isDark={isDark}
+      $isDebug={isDebug}
       $primary="#0087ff"
-      $steps="10"
-      $radius="2.5px"
+      $orange="#f5793a"
+      $blue="#85c0f9"
+      $gray={isDark ? "#939598" : "#8b888a"}
+      $green={isDark ? "#538d4e" : "#6aaa64"}
+      $yellow={isDark ? "#b59f3b" : "#c9b458"}
+      $color={isDark ? darken(0.02, "#fff") : lighten(0.02, "#212121")}
+      $background={isDark ? lighten(0.02, "#212121") : darken(0.02, "#fff")}
       $margin="100px"
-      $title="min(10vw, 10vh)"
-      $test="1rem"
+      $radius="0.2rem"
+      $gap="0.2rem"
       $nav="1rem"
-      $gap="0.15rem"
+      $title="min(10vw, 10vh)"
       $size="min(100vw, 100vh)"
-      $font={`calc(min(100vw, 100vh) / ${2*n*n})`}
-      $debug={false}
+      $font={`calc(min(100vw, 100vh) / ${2 * n * n})`}
+      $aspect={`min-aspect-ratio: ${n * n + 2}/${n * n}`}
     >
       <Home.Style />
       <Home.Wrap>
         <Grid $n={n} $one $left $top $nav>
-          {range(n*(n-1)).map((i) => <div key={i}/>)}
+          {range(n * (n - 1)).map((i) => (
+            <div key={i} />
+          ))}
           <Nav $n={n}>
-            <Nav.Title>SUDO</Nav.Title>
+            <Nav.Title>{x || "SUDO"}</Nav.Title>
           </Nav>
           <Nav $n={n}>
             <Nav.Other>
@@ -60,6 +71,16 @@ function App() {
                 checked={isNum}
                 onChange={(e) => setIsNum(e.target.checked)}
               />
+              <Toggle
+                checked={isDark}
+                onChange={(e) => setIsDark(e.target.checked)}
+              />
+              <Toggle
+                leftIcon="🐛"
+                rightIcon="👀"
+                checked={isDebug}
+                onChange={(e) => setIsDebug(e.target.checked)}
+              />
             </Nav.Other>
           </Nav>
         </Grid>
@@ -75,9 +96,7 @@ function App() {
         <Grid $n={n} $one $right $top>
           {(i) => (
             <Grid $n={n} key={i} $one $right>
-              {(ii) => (
-                <Box key={ii} children={(i*n+ii).toString(n*n)}/>
-              )}
+              {(ii) => <Box key={ii} {...bind(i * n + ii + 1)} />}
             </Grid>
           )}
         </Grid>

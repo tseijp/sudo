@@ -4,17 +4,22 @@ import { m2kl, kl2m, ij2m, m2ij } from "../utils";
 
 export type Props = {
   isNum: boolean;
+  pads: number[][]; // not using
+  m: number;
   n: number;
-  pads: number[][];
+  x: string;
+  setM: any;
+  setN: any;
+  setX: any;
 };
 
 export type State = {
   n: number;
   nn: number;
   nnn: number;
+  seed: number | string;
   isNum: boolean;
   isFirst: boolean;
-  seed: number | string;
   toString: (i: number) => string;
 };
 
@@ -56,14 +61,25 @@ export class Controller {
     return this.bind.bind(this);
   }
 
-  bind(...args:[k: number, l: number] | [m: number]) {
-    const { discr } = this;
+  bind(k: number = 0, l: number = -1) {
+    const {
+      discr,
+      state: $,
+      props: { m, n, x, setM = () => {}, setX = () => {} }
+    } = this;
     const props: any = {};
-    props.children = this.discr.get(...args);
-    props.value = this.discr.get(...args);
-    props.onChange = () => {};
-    props.onClick = () => console.log(discr.items(...args))
-    props.items = () => discr.items(...args);
+    if (!~l) {
+      props.value = props.children = $.toString(k);
+      props.onMouseEnter = () => setX(props.value);
+      return props;
+    }
+    props.value = props.children = discr.get(k, l);
+    props.onMouseEnter = () => void (setM(k * n * n + l), setX(props.value));
+    props.onMouseLeave = () => void (setM(-1), setX(""));
+    props.onClick = () => console.log(discr.items(k, l));
+    props.items = () => discr.items(k, l);
+    props.$isColor = props.children === x;
+    props.$isHighlight = discr.relative(m, k, l);
     return props;
   }
 

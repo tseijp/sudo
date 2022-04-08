@@ -18,12 +18,17 @@ export type GridProps = Partial<{
 }>;
 
 export function Grid(props: GridProps) {
-  const { $n, $nav, $one, children=() => ''} = props;
-  const toFun = <T>(v: T) => typeof v === "function"? v: (..._: any) => v
+  const { $n, $nav, $one, children = () => "" } = props;
+  const toFun = <T>(v: T) => (typeof v === "function" ? v : (..._: any) => v);
   const n = Number($n);
-  return el(Grid.Wrap, props, $nav? children: $one
-      ? range(n).map(i => toFun(children)(i, -1))
-      : range(n).map(j => range(n).map(i => toFun(children)(i, j)))
+  return el(
+    Grid.Wrap,
+    props,
+    $nav
+      ? children
+      : $one
+      ? range(n).map((i) => toFun(children)(i, -1))
+      : range(n).map((j) => range(n).map((i) => toFun(children)(i, j)))
   );
 }
 
@@ -56,14 +61,14 @@ function oneStyle($: GridProps & { theme: ThemeProps }) {
     @media screen and (${($) => $.theme.$aspect}) {
       grid-auto-flow: column;
     }
-  `
+  `;
 }
 
 Grid.Wrap = styled.div<GridProps & { theme?: ThemeProps }>`
   display: grid;
   padding: ${($) => $.theme.$gap};
   grid-gap: ${($) => $.theme.$gap};
-  background: ${($) => $.theme.$dark};
+  background: ${($) => $.theme.$background};
   border-radius: ${($) => $.theme.$radius};
   grid-auto-rows: 1fr;
   ${oneStyle}

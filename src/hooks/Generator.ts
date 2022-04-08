@@ -33,5 +33,6 @@ export class Generator {
     const { state: $ } = this._ctrl;
     const noise = abs((this._simplex.noise2D(i, j) * $.nn) << 0);
     return $.toString(noise);
+    // return abs((this._simplex.noise2D(i, j) * $.nn) << 0);
   }
 }

@@ -4,12 +4,12 @@ import { darken, lighten } from "polished";
 import { debugStyle } from "./Home";
 
 export type NavProps = Partial<{
-  $n: number
-  children: ReactNode
-}>
+  $n: number;
+  children: ReactNode;
+}>;
 
 export function Nav(props: NavProps) {
-  return el(Nav.Wrap, props)
+  return el(Nav.Wrap, props);
 }
 
 Nav.Wrap = styled.div<NavProps>`
@@ -33,8 +33,6 @@ Nav.Wrap = styled.div<NavProps>`
 Nav.Other = styled.div`
   display: flex;
   margin: 1rem;
-  padding: 0;
-
   text-align: center;
   align-items: center;
   vertical-align: center;
@@ -48,6 +46,7 @@ Nav.Other = styled.div`
 Nav.Title = styled.h1`
   margin: 0;
   padding: 0;
+  color: ${($) => $.theme.$color};
   font-size: ${($) => $.theme.$title};
   @media screen and (min-aspect-ratio: 1/1) {
     writing-mode: vertical-rl;
@@ -65,8 +64,8 @@ Nav.Select = styled.select`
   }
   border: 0;
   border-radius: ${($) => $.theme.$radius};
-  background: ${($) => darken(0.05, $.theme.$light)};
-  color: ${($) => lighten(0.05, $.theme.$dark)};
+  background: ${($) => $.theme.$background};
+  color: ${($) => $.theme.$color};
   font-size: 2rem;
   > option {
     border: 0;
@@ -74,11 +73,10 @@ Nav.Select = styled.select`
   }
 `;
 
-function useCheckAttrs(props: {type: string, name: string}) {
-  props.type="checkbox"
-  props.name="checkbox"
-  return props
+function useCheckAttrs(props: { type: string; name: string }) {
+  props.type = "checkbox";
+  props.name = "checkbox";
+  return props;
 }
 
-Nav.Check = styled.input.attrs(useCheckAttrs)`
-`
+Nav.Check = styled.input.attrs(useCheckAttrs)``;
