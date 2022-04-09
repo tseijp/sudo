@@ -4,15 +4,16 @@ import styled, {
   createGlobalStyle,
   ThemeProvider
 } from "styled-components";
-import { useControls } from "leva";
+// import { useControls } from "leva";
 
 export type ThemeProps = {
   /**
    * root setting
    */
-  $isDebug: boolean;
-  $isDark: boolean;
   $isNum: boolean;
+  $isDark: boolean;
+  $isDebug: boolean;
+  $isBlind: boolean;
   /**
    * color
    */
@@ -38,8 +39,12 @@ export type ThemeProps = {
 };
 
 export const Home = (props: ThemeProps & { children: ReactNode }) => {
-  const { children, ...other } = props;
-  const theme = useControls(other as ThemeProps);
+  const { children, $isNum, $isDark, $isBlind, $isDebug, ...other } = props;
+  const theme = other as ThemeProps // useControls(other as ThemeProps, [$isDark]);
+  theme.$isNum = $isNum
+  theme.$isDark = $isDark
+  theme.$isBlind = $isBlind
+  theme.$isDebug = $isDebug
   return el(ThemeProvider, { theme }, children);
 };
 
@@ -51,7 +56,8 @@ export function debugStyle($: { theme: ThemeProps }) {
 }
 
 Home.Wrap = styled.div`
-  position: fixed;
+  position: absolute;
+  overflow-x: hidden;
   display: flex;
   border: "#000";
   top: 0;

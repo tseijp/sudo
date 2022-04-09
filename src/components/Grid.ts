@@ -1,19 +1,23 @@
 import { ReactNode, createElement as el } from "react";
 import styled, { css } from "styled-components";
+import { colorStyle, highlightStyle } from "./Box";
 import { ThemeProps, debugStyle } from "./Home";
 import { range } from "../utils";
 
 export type GridProps = Partial<{
+  $isHighlight: boolean;
+  $isColor: boolean;
+  $right: boolean;
+  $left: boolean;
+  $nav: boolean;
+  $top: boolean;
+  $one: boolean;
+  $end: boolean;
   $i: string | number;
   $j: string | number;
   $n: string | number;
   $w: string | number;
   $h: string | number;
-  $nav: boolean;
-  $top: boolean;
-  $one: boolean;
-  $left: boolean;
-  $right: boolean;
   children: ReactNode | ((i: number, j: number) => ReactNode);
 }>;
 
@@ -64,6 +68,18 @@ function oneStyle($: GridProps & { theme: ThemeProps }) {
   `;
 }
 
+function endStyle($: GridProps & { theme: ThemeProps }) {
+  if (!$.$end) return;
+  return css`
+    width: 100%;
+    height: 100%;
+    border: none;
+    text-align: center;
+    vertical-align: center;
+    font-size: calc(${$.theme.$font} / ${$.$n});
+  `;
+}
+
 Grid.Wrap = styled.div<GridProps & { theme?: ThemeProps }>`
   display: grid;
   padding: ${($) => $.theme.$gap};
@@ -71,9 +87,12 @@ Grid.Wrap = styled.div<GridProps & { theme?: ThemeProps }>`
   background: ${($) => $.theme.$background};
   border-radius: ${($) => $.theme.$radius};
   grid-auto-rows: 1fr;
-  ${oneStyle}
-  ${topStyle}
-  ${debugStyle}
   ${($) => `grid-template-rows: ${repeat($.$n, $.$j)};`}
   ${($) => `grid-template-columns: ${repeat($.$n, $.$i)};`}
+  ${oneStyle}
+  ${topStyle}
+  ${endStyle}
+  ${debugStyle}
+  ${colorStyle}
+  ${highlightStyle}
 `;

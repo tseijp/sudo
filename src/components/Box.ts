@@ -23,15 +23,15 @@ export function Box<T>(props: T & BoxProps) {
 export function colorStyle($: BoxProps & { theme: ThemeProps }) {
   if (!$.$isColor) return;
   return css`
-    color: ${$.theme.$green};
+    background: ${$.theme.$yellow};
   `;
 }
 
-export function highlightSyle($: BoxProps & { theme: ThemeProps }) {
+export function highlightStyle($: BoxProps & { theme: ThemeProps }) {
   if (!$.$isHighlight) return;
   return css`
-    background: ${$.theme.$yellow};
-    transition: 0.1s;
+    background: ${$.theme.$gray};
+    transition: 0.25s;
   `;
 }
 
@@ -53,9 +53,9 @@ Box.Wrap = styled.div<BoxProps>`
   color: ${($) => $.theme.$color};
   ${($) => $.$j && `grid-row: ${$.$j};`}
   ${($) => $.$i && `grid-column: ${$.$i};`}
-  ${debugStyle}
+  ${highlightStyle}
   ${colorStyle}
-  ${highlightSyle}
+  ${debugStyle}
 `;
 
 Box.Select = styled.div``;

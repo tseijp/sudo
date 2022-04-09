@@ -20,15 +20,17 @@ const pads = [
 function App() {
   const [x, setX] = React.useState("");
   const [m, setM] = React.useState(-1);
-  const [n, setN] = React.useState(4);
+  const [n, setN] = React.useState(2);
   const [isNum, setIsNum] = React.useState(false);
   const [isDark, setIsDark] = React.useState(true);
+  const [isBlind, setIsBlind] = React.useState(false);
   const [isDebug, setIsDebug] = React.useState(false);
-  const bind = $({ pads, isNum, x, m, n, setM, setN, setX });
+  const bind = $({ pads, x, m, n, setM, setN, setX, isNum, isBlind });
   return (
     <Home
       $isNum={isNum}
       $isDark={isDark}
+      $isBlind={isDebug}
       $isDebug={isDebug}
       $primary="#0087ff"
       $orange="#f5793a"
@@ -58,29 +60,15 @@ function App() {
           </Nav>
           <Nav $n={n}>
             <Nav.Other>
-              <Nav.Select
-                value={n}
-                onChange={(e) => setN(Number(e.target.value))}
-                children={range(7).map((i) => (
+              <Nav.Select value={n} onChange={(e) => setN(Number(e.target.value))} >
+                {range(7).map((i) => (
                   <option key={i}>{i}</option>
                 ))}
-              />
-              <Toggle
-                leftIcon="🔢"
-                rightIcon="🔡"
-                checked={isNum}
-                onChange={(e) => setIsNum(e.target.checked)}
-              />
-              <Toggle
-                checked={isDark}
-                onChange={(e) => setIsDark(e.target.checked)}
-              />
-              <Toggle
-                leftIcon="🐛"
-                rightIcon="👀"
-                checked={isDebug}
-                onChange={(e) => setIsDebug(e.target.checked)}
-              />
+              </Nav.Select>
+              <Toggle checked={isDark} onChange={(e) => setIsDark(e.target.checked)} />
+              <Toggle leftIcon="🔢" rightIcon="🔡" checked={isNum} onChange={(e) => setIsNum(e.target.checked)}/>
+              <Toggle leftIcon="😎" rightIcon="💡" checked={isBlind} onChange={(e) => setIsBlind(e.target.checked)} />
+              <Toggle leftIcon="🐛" rightIcon="👀" checked={isDebug} onChange={(e) => setIsDebug(e.target.checked)}/>
             </Nav.Other>
           </Nav>
         </Grid>

@@ -1,9 +1,10 @@
+import { createElement as el } from "react";
 import { Generator } from "./Generator";
 import { Discriminator } from "./Discriminator";
 import { m2kl, kl2m, ij2m, m2ij } from "../utils";
+import { Grid } from "../components";
 
 export type Props = {
-  isNum: boolean;
   pads: number[][]; // not using
   m: number;
   n: number;
@@ -11,6 +12,8 @@ export type Props = {
   setM: any;
   setN: any;
   setX: any;
+  isNum: boolean;
+  isBlind: boolean;
 };
 
 export type State = {
@@ -65,7 +68,7 @@ export class Controller {
     const {
       discr,
       state: $,
-      props: { m, n, x, setM = () => {}, setX = () => {} }
+      props: { m, n, x, isBlind, setM = () => {}, setX = () => {} }
     } = this;
     const props: any = {};
     if (!~l) {
@@ -80,6 +83,15 @@ export class Controller {
     props.items = () => discr.items(k, l);
     props.$isColor = props.children === x;
     props.$isHighlight = discr.relative(m, k, l);
+    if(!isBlind && props.children === "0") {
+      props.$n = n;
+      props.$end = true;
+      props.children = (i=0, j=0) => {
+        const x = $.toString(j * n + i);
+        return el("div", {key: x}, discr.has(x, k, l)? "": x);
+      }
+      return { children: el(Grid, props)};
+    }
     return props;
   }
 

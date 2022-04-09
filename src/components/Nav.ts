@@ -1,6 +1,5 @@
 import { ReactNode, createElement as el } from "react";
 import styled from "styled-components";
-import { darken, lighten } from "polished";
 import { debugStyle } from "./Home";
 
 export type NavProps = Partial<{
