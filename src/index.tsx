@@ -20,12 +20,14 @@ const pads = [
 function App() {
   const [x, setX] = React.useState("");
   const [m, setM] = React.useState(-1);
-  const [n, setN] = React.useState(2);
+  const [n, setN] = React.useState(4);
   const [isNum, setIsNum] = React.useState(false);
   const [isDark, setIsDark] = React.useState(true);
   const [isBlind, setIsBlind] = React.useState(false);
+  const [isFixed, setIsFixed] = React.useState(false);
   const [isDebug, setIsDebug] = React.useState(false);
-  const bind = $({ pads, x, m, n, setM, setN, setX, isNum, isBlind });
+  console.log(isFixed)
+  const bind = $({ pads, x, m, n, isNum, isBlind, isFixed, setM, setN, setX, setIsFixed });
   return (
     <Home
       $isNum={isNum}
@@ -35,60 +37,52 @@ function App() {
       $primary="#0087ff"
       $orange="#f5793a"
       $blue="#85c0f9"
-      $gray={isDark ? "#939598" : "#8b888a"}
-      $green={isDark ? "#538d4e" : "#6aaa64"}
-      $yellow={isDark ? "#b59f3b" : "#c9b458"}
-      $color={isDark ? darken(0.02, "#fff") : lighten(0.02, "#212121")}
-      $background={isDark ? lighten(0.02, "#212121") : darken(0.02, "#fff")}
+      $gray={isDark? "#8b888a": "#939598"}
+      $green={isDark? "#538d4e": "#6aaa64"}
+      $yellow={isDark? "#b59f3b": "#c9b458"}
+      $color={isDark? darken(0.02, "#e0e0e0"): lighten(0.02, "#212121")}
+      $background={isDark? lighten(0.02, "#212121"): darken(0.02, "#fff")}
       $margin="100px"
-      $radius="0.2rem"
+      $radius="1px"
       $gap="0.2rem"
       $nav="1rem"
       $title="min(10vw, 10vh)"
       $size="min(100vw, 100vh)"
-      $font={`calc(min(100vw, 100vh) / ${2 * n * n})`}
+      $font={`calc(min(100vw, 100vh) / ${4 * n * n})`}
       $aspect={`min-aspect-ratio: ${n * n + 2}/${n * n}`}
     >
-      <Home.Style />
-      <Home.Wrap>
-        <Grid $n={n} $one $left $top $nav>
-          {range(n * (n - 1)).map((i) => (
-            <div key={i} />
-          ))}
-          <Nav $n={n}>
-            <Nav.Title>{x || "SUDO"}</Nav.Title>
-          </Nav>
-          <Nav $n={n}>
-            <Nav.Other>
-              <Nav.Select value={n} onChange={(e) => setN(Number(e.target.value))} >
-                {range(7).map((i) => (
-                  <option key={i}>{i}</option>
-                ))}
-              </Nav.Select>
-              <Toggle checked={isDark} onChange={(e) => setIsDark(e.target.checked)} />
-              <Toggle leftIcon="🔢" rightIcon="🔡" checked={isNum} onChange={(e) => setIsNum(e.target.checked)}/>
-              <Toggle leftIcon="😎" rightIcon="💡" checked={isBlind} onChange={(e) => setIsBlind(e.target.checked)} />
-              <Toggle leftIcon="🐛" rightIcon="👀" checked={isDebug} onChange={(e) => setIsDebug(e.target.checked)}/>
-            </Nav.Other>
-          </Nav>
-        </Grid>
-        <Grid $n={n} $top>
-          {(i, j) => (
-            <Grid $n={n} key={i << j}>
-              {(ii, jj) => (
-                <Box key={ii << jj} {...bind(i + j * n, ii + jj * n)} />
-              )}
-            </Grid>
-          )}
-        </Grid>
-        <Grid $n={n} $one $right $top>
-          {(i) => (
-            <Grid $n={n} key={i} $one $right>
-              {(ii) => <Box key={ii} {...bind(i * n + ii + 1)} />}
-            </Grid>
-          )}
-        </Grid>
-      </Home.Wrap>
+      <Grid $n={n} $one $left $top $nav>
+        <Nav $n={n}>
+          <Nav.Title>{isFixed || "SUDO"}</Nav.Title>
+        </Nav>
+        <Nav $n={n}>
+          <Nav.Other>
+            <Nav.Select value={n} onChange={(e) => setN(Number(e.target.value))} >
+              {range(5).map((i) => <option key={i}>{i+1}</option>)}
+            </Nav.Select>
+            <Toggle args={[isDark, (e) => setIsDark(e.target.checked)]} />
+            <Toggle args={[isNum, (e) => setIsNum(e.target.checked), "🔢", "🔡"]} />
+            <Toggle args={[isBlind, (e) => setIsBlind(e.target.checked), "😎", "💡"]} />
+            <Toggle args={[isDebug, (e) => setIsDebug(e.target.checked), "🐛", "👀"]} />
+          </Nav.Other>
+        </Nav>
+      </Grid>
+      <Grid $n={n} $top>
+        {(i, j) => (
+          <Grid $n={n} key={i << j}>
+            {(ii, jj) => (
+              <Box key={ii << jj} {...bind(i + j * n, ii + jj * n)} />
+            )}
+          </Grid>
+        )}
+      </Grid>
+      <Grid $n={n} $one $right $top>
+        {(i) => (
+          <Grid $n={n} key={i} $one $right>
+            {(ii) => <Box key={ii} {...bind(i * n + ii + 1)} />}
+          </Grid>
+        )}
+      </Grid>
     </Home>
   );
 }

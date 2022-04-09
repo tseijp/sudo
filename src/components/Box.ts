@@ -1,10 +1,10 @@
 import { ReactNode, createElement as el } from "react";
-import styled, { css } from "styled-components";
-import { ThemeProps, debugStyle } from "./Home";
+import styled from "styled-components";
+import * as styles from "./styles";
 
 export type BoxProps = Partial<{
-  $isHighlight: boolean;
-  $isColor: boolean;
+  $isRelative: boolean;
+  $isEqual: boolean;
   $i: string | number;
   $j: string | number;
   $s: string | number;
@@ -18,21 +18,6 @@ export type BoxProps = Partial<{
 export function Box<T>(props: T & BoxProps) {
   const { children } = props;
   return el(Box.Wrap, props, children !== "0" && children);
-}
-
-export function colorStyle($: BoxProps & { theme: ThemeProps }) {
-  if (!$.$isColor) return;
-  return css`
-    background: ${$.theme.$yellow};
-  `;
-}
-
-export function highlightStyle($: BoxProps & { theme: ThemeProps }) {
-  if (!$.$isHighlight) return;
-  return css`
-    background: ${$.theme.$gray};
-    transition: 0.25s;
-  `;
 }
 
 Box.Wrap = styled.div<BoxProps>`
@@ -53,9 +38,10 @@ Box.Wrap = styled.div<BoxProps>`
   color: ${($) => $.theme.$color};
   ${($) => $.$j && `grid-row: ${$.$j};`}
   ${($) => $.$i && `grid-column: ${$.$i};`}
-  ${highlightStyle}
-  ${colorStyle}
-  ${debugStyle}
+  ${styles.relativeBoxStyle}
+  ${styles.primaryBoxStyle}
+  ${styles.equalBoxStyle}
+  ${styles.debugStyle}
 `;
 
 Box.Select = styled.div``;

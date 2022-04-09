@@ -1,6 +1,6 @@
 import { ReactNode, createElement as el } from "react";
 import styled from "styled-components";
-import { debugStyle } from "./Home";
+import { debugStyle } from "./styles";
 
 export type NavProps = Partial<{
   $n: number;
@@ -46,7 +46,7 @@ Nav.Title = styled.h1`
   margin: 0;
   padding: 0;
   color: ${($) => $.theme.$color};
-  font-size: ${($) => $.theme.$title};
+  font-size: ${($) => $.theme.$font};
   @media screen and (min-aspect-ratio: 1/1) {
     writing-mode: vertical-rl;
     text-orientation: upright;

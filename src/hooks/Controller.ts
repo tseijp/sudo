@@ -6,7 +6,7 @@ import { Grid } from "../components";
 
 export type Props = {
   pads: number[][]; // not using
-  m: number;
+  m: number;  
   n: number;
   x: string;
   setM: any;
@@ -14,6 +14,8 @@ export type Props = {
   setX: any;
   isNum: boolean;
   isBlind: boolean;
+  isFixed: boolean;
+  setIsFixed: any;
 };
 
 export type State = {
@@ -60,39 +62,44 @@ export class Controller {
     $.isFirst = props.n !== $.n;
     $.nnn = ($.nn = ($.n = props.n || 3) * $.n) * $.n;
     $.isNum = props.isNum || $.nn < 2 || 36 < $.nn;
-    $.toString = $.isNum ? (i = 0) => i + "" : (i = 0) => i.toString($.nn);
+    $.toString = $.isNum
+      ? (i = 0) => i + ""
+      : (i = 0) => i.toString($.nn + 1);
     return this.bind.bind(this);
   }
 
   bind(k: number = 0, l: number = -1) {
-    const {
-      discr,
-      state: $,
-      props: { m, n, x, isBlind, setM = () => {}, setX = () => {} }
-    } = this;
-    const props: any = {};
+    const _w = (..._args: any) => void console.warn('Warn: Function is not defined.')
+    const { discr, state: $, props } = this;
+    const { m, n, x, isBlind, setM=_w, setX=_w, setIsFixed=_w } = props
+    const _props: any = {};
     if (!~l) {
-      props.value = props.children = $.toString(k);
-      props.onMouseEnter = () => setX(props.value);
-      return props;
+      const _x = $.toString(k);
+      _props.value = _props.children = _x;
+      _props.onMouseEnter = () => void setX(_x);
+      _props.$isEqual = _props.$isPrimary = x === _x;
+      return _props;
     }
-    props.value = props.children = discr.get(k, l);
-    props.onMouseEnter = () => void (setM(k * n * n + l), setX(props.value));
-    props.onMouseLeave = () => void (setM(-1), setX(""));
-    props.onClick = () => console.log(discr.items(k, l));
-    props.items = () => discr.items(k, l);
-    props.$isColor = props.children === x;
-    props.$isHighlight = discr.relative(m, k, l);
-    if(!isBlind && props.children === "0") {
-      props.$n = n;
-      props.$end = true;
-      props.children = (i=0, j=0) => {
-        const x = $.toString(j * n + i);
+    const _m = k * n * n + l;
+    const _x = discr.get(_m);
+    _props.value = _props.children = _x;
+    _props.onMouseEnter = () => void (setM(_m), setX(_x));
+    _props.onMouseLeave = () => void (setM(-1), setX(""));
+    _props.onClick = () => setIsFixed((p=false) => p);
+    _props.$isRelative = discr.relative(m, k, l);
+    _props.$isPrimary = m === _m;
+    _props.$isEqual = x === _x;
+    if(!isBlind && _x === "0") {
+      const __props: any = {}
+      __props.$n = n;
+      __props.$end = true;
+      __props.children = (i=0, j=0) => {
+        const x = $.toString(j * n + i + 1);
         return el("div", {key: x}, discr.has(x, k, l)? "": x);
       }
-      return { children: el(Grid, props)};
+      _props.children = el(Grid, __props)
     }
-    return props;
+    return _props;
   }
 
   each(fun = (_: number) => {}) {

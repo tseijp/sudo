@@ -1,9 +1,5 @@
 import { ReactNode, createElement as el } from "react";
-import styled, {
-  css,
-  createGlobalStyle,
-  ThemeProvider
-} from "styled-components";
+import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 // import { useControls } from "leva";
 
 export type ThemeProps = {
@@ -45,17 +41,11 @@ export const Home = (props: ThemeProps & { children: ReactNode }) => {
   theme.$isDark = $isDark
   theme.$isBlind = $isBlind
   theme.$isDebug = $isDebug
-  return el(ThemeProvider, { theme }, children);
+  const _children = el(Home._Wrap, {}, [el(Home._Style, {key: 0}), children])
+  return el(ThemeProvider, { theme }, _children);
 };
 
-export function debugStyle($: { theme: ThemeProps }) {
-  if ($.theme.$isDebug)
-    return css`
-      background: ${"#" + ((Math.random() * 0xffffff) | 0).toString(16)};
-    `;
-}
-
-Home.Wrap = styled.div`
+Home._Wrap = styled.div`
   position: absolute;
   overflow-x: hidden;
   display: flex;
@@ -75,7 +65,7 @@ Home.Wrap = styled.div`
   }
 `;
 
-Home.Style = createGlobalStyle<{ theme: ThemeProps }>`
+Home._Style = createGlobalStyle<{ theme: ThemeProps }>`
   html,
   body,
   #root {

@@ -54,12 +54,6 @@ export class Discriminator {
     }
   }
 
-  items (...args: Args) {
-    const ret: number[] = []
-    this._ctrl.each((x) => !this.has(x+"", ...args) && ret.push(x));
-    return ret
-  }
-
   has(x = "1", ...args: Args) {
     let [i, j, k, , m] = this._klm2(...args);
     if (this._m.get(m) === x) return true;
