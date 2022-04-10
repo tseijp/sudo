@@ -7,39 +7,43 @@ type ToggleProps = Partial<{
   checked: boolean
   disabled: boolean
   onChange: React.ChangeEventHandler<HTMLInputElement>
-  leftIcon: React.ReactNode
-  rightIcon: React.ReactNode
+  left: React.ReactNode
+  right: React.ReactNode
+  args: [
+    checked: ToggleProps["checked"],
+    onChange: ToggleProps["onChange"],
+    left?: ToggleProps["left"],
+    right?: ToggleProps["right"]
+  ]
 }>
 
 export function Toggle <T>(props: T & ToggleProps): JSX.Element {
-  const { disabled=false, onChange, leftIcon="🌟", rightIcon="🌞", ...other } = props
+  let { checked, onChange, left="🌟", right="🌞", disabled=false, args, ...other } = props
+  if (args) [checked, onChange, left=left, right=right] = args;
   const inputRef = useRef<HTMLInputElement>(null);
   const handleClick = disabled? undefined: () => inputRef.current?.click()
-  const [checked, setChecked] = useState(props.checked || false);
-  const thumb = useSpring({ left: checked? "2.6rem": "0rem" })
-  const right = useSpring({ right: checked? "0rem": "1rem", opacity: checked? "0": "1"})
-  const left = useSpring({ left: checked? "0.8rem": "0rem", opacity: checked? "1": "0"})
+  const [_, set_] = useState(checked || false);
   return (
     <Toggle.Container disabled={disabled} {...other}>
       <Toggle.Track role="button" tabIndex={-1} onClick={handleClick} disabled={disabled}>
-        <Toggle.TrackCheck style={left}>
+        <Toggle.TrackCheck style={useSpring({ left: _? "0.8rem": "0rem", opacity: _? "1": "0"})}>
           <Toggle.Icon>
-            {leftIcon}
+            {left}
           </Toggle.Icon>
         </Toggle.TrackCheck>
-        <Toggle.TrackCheck style={right}>
+        <Toggle.TrackCheck style={useSpring({ right: _? "0rem": "1rem", opacity: _? "0": "1"})}>
           <Toggle.Icon>
-            {rightIcon}
+            {right}
           </Toggle.Icon>
         </Toggle.TrackCheck>
-        <Toggle.TrackThumb style={thumb}/>
+        <Toggle.TrackThumb style={useSpring({ left: _? "2.6rem": "0rem" })}/>
       </Toggle.Track>
       <Toggle.ScreenReader
         ref={inputRef}
         type="checkbox"
         onChange={onChange}
-        onClick={() => void setChecked(!checked)}
-        checked={checked}
+        onClick={() => void set_(p => !p)}
+        checked={_}
       />
     </Toggle.Container>
   );

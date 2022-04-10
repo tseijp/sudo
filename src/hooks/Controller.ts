@@ -1,43 +1,63 @@
+import { createElement as el } from "react";
 import { Generator } from "./Generator";
 import { Discriminator } from "./Discriminator";
 import { m2kl, kl2m, ij2m, m2ij } from "../utils";
+import { Grid, Box } from "../components";
 
 export type Props = {
-  isNum: boolean;
+  pads: number[][]; // not using
+  m: number;  
   n: number;
-  pads: number[][];
+  x: number;
+  isNum: boolean;
+  isBlind: boolean;
+  isFixed: boolean;
+};
+
+export type Native = {
+  [key in string]: (state: State & {event: Event, args: any}) => void
 };
 
 export type State = {
+  /**
+   * generic state
+   */
   n: number;
   nn: number;
   nnn: number;
+  seed: number | string;
   isNum: boolean;
   isFirst: boolean;
-  seed: number | string;
-  toString: (i: number) => string;
+  gener: Generator;
+  discr: Discriminator;
+  update: (...args: any) => void
+  toString: (i?: number) => string;
 };
 
 export class Controller {
   // pads: Map<number, number>;
+  native: Native = {} as Native
   props: Props = {} as Props;
   state: State = {} as State;
-  gener: Generator;
-  discr: Discriminator;
   update = () => {};
 
-  constructor(props: Partial<Props> = {}) {
+
+  constructor(props: Props, native: Native) {
     this.each = this.each.bind(this);
-    this.props = props as Props;
-    this.gener = new Generator(this);
-    this.discr = new Discriminator(this);
+    this.props = props;
+    this.native = native;
+    this.state.gener = new Generator(this);
+    this.state.discr = new Discriminator(this);
   }
 
   effect() {
     const { state: $ } = this;
-    this.gener.effect();
-    this.discr.effect();
-    if ($.isFirst) this.update();
+    /**
+     * update if change n
+     */
+    if($.isFirst) this.update();
+    this.state.gener.effect();
+    this.state.discr.effect();
     $.isFirst = false;
   }
 
@@ -45,26 +65,43 @@ export class Controller {
     return;
   }
 
-  apply(props: Props, update = () => {}) {
+  apply(props: Props, native: Native, update = () => {}) {
     const { state: $ } = this;
     this.props = props;
-    this.update = update;
+    this.native = native;
+    this.state.update = update;
     $.isFirst = props.n !== $.n;
     $.nnn = ($.nn = ($.n = props.n || 3) * $.n) * $.n;
     $.isNum = props.isNum || $.nn < 2 || 36 < $.nn;
-    $.toString = $.isNum ? (i = 0) => i + "" : (i = 0) => i.toString($.nn);
+    $.toString = $.isNum
+      ? (i = 0) => i + ""
+      : (i = 0) => i.toString($.nn + 1);
     return this.bind.bind(this);
   }
 
-  bind(...args:[k: number, l: number] | [m: number]) {
-    const { discr } = this;
-    const props: any = {};
-    props.children = this.discr.get(...args);
-    props.value = this.discr.get(...args);
-    props.onChange = () => {};
-    props.onClick = () => console.log(discr.items(...args))
-    props.items = () => discr.items(...args);
-    return props;
+  bind(k: number = 0, l: number = -1) {
+    const { state: $, props, native } = this;
+    const { m, n, x, isBlind } = props;
+    const _props: any = {};
+    let _m, _x, args: any;
+    args = [,,,, _m, _x] = ~l
+      ? $.discr._klm2(k, l)
+      : [0,0,0,0, -1, k];
+    _props.$isRelative = ~l && $.discr.relative(m, k, l);
+    _props.$isPrimary = ~l && _m === m;
+    _props.$isEqual = ~l? _x !== 0 && _x === x: _x === x;
+    _props.children = _x? $.toString(_x): isBlind ||
+      el(Grid, {$n: n, $end: true}, (i=0, j=0) => {
+        const __x = j * n + i + 1;
+        const __c = $.discr.has(__x, k, l)? "": $.toString(__x);
+        const $isEqual = __c !== "" && __x !== 0 && __x === x;
+        return el(Box, {key: __x, $end: true, $isEqual}, __c);
+      });
+
+    for(const key in native)
+      _props[key] = (e: Event) => native[key]({event: e, args, ...$});
+
+    return _props;
   }
 
   each(fun = (_: number) => {}) {

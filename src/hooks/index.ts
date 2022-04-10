@@ -1,5 +1,5 @@
 import React from "react";
-import { Controller, Props } from "./Controller";
+import { Controller, Native, Props } from "./Controller";
 
 class DelayController {
   listener = () => {};
@@ -30,11 +30,11 @@ export function useUpdate() {
   return React.useCallback(() => void update([]), [update])
 }
 
-export default function $(props: Props) {
+export default function $(props: Props, native: Native) {
   const update = useUpdate();
-  const [ctrl] = React.useState(new Controller(props));
+  const [ctrl] = React.useState(new Controller(props, native));
   React.useEffect(() => update(), [update])
   React.useEffect(() => ctrl.effect());
   React.useEffect(() => () => ctrl.clean(), [ctrl]);
-  return ctrl.apply(props, update);
+  return ctrl.apply(props, native, update);
 }

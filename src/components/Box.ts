@@ -1,8 +1,12 @@
 import { ReactNode, createElement as el } from "react";
 import styled from "styled-components";
-import { debugStyle } from "./Home";
+import * as styles from "./styles";
 
 export type BoxProps = Partial<{
+  $isRelative: boolean;
+  $isPrimary: boolean;
+  $isEqual: boolean;
+  $end: boolean;
   $i: string | number;
   $j: string | number;
   $s: string | number;
@@ -20,7 +24,6 @@ export function Box<T>(props: T & BoxProps) {
 
 Box.Wrap = styled.div<BoxProps>`
   display: flex;
-  border: initial;
   outline: none;
   text-align: center;
   align-items: center;
@@ -31,11 +34,17 @@ Box.Wrap = styled.div<BoxProps>`
   justify-content: center;
   font-size: ${($) => $.theme.$font};
   border-radius: ${($) => $.theme.$radius};
-  background: ${($) => $.theme.$light};
-  color: ${($) => $.theme.$dark};
+  border-color: ${($) => $.theme.$color};
+  border-width: ${($) => $.theme.$radius};
+  border-style: solid;
+  color: ${($) => $.theme.$color};
   ${($) => $.$j && `grid-row: ${$.$j};`}
   ${($) => $.$i && `grid-column: ${$.$i};`}
-  ${debugStyle}
+  ${styles.relativeBoxStyle}
+  ${styles.primaryBoxStyle}
+  ${styles.equalBoxStyle}
+  ${styles.endBoxStyle}
+  ${styles.debugStyle}
 `;
 
 Box.Select = styled.div``;

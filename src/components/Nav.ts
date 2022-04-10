@@ -1,15 +1,14 @@
 import { ReactNode, createElement as el } from "react";
 import styled from "styled-components";
-import { darken, lighten } from "polished";
-import { debugStyle } from "./Home";
+import { debugStyle } from "./styles";
 
 export type NavProps = Partial<{
-  $n: number
-  children: ReactNode
-}>
+  $n: number;
+  children: ReactNode;
+}>;
 
 export function Nav(props: NavProps) {
-  return el(Nav.Wrap, props)
+  return el(Nav.Wrap, props);
 }
 
 Nav.Wrap = styled.div<NavProps>`
@@ -33,8 +32,6 @@ Nav.Wrap = styled.div<NavProps>`
 Nav.Other = styled.div`
   display: flex;
   margin: 1rem;
-  padding: 0;
-
   text-align: center;
   align-items: center;
   vertical-align: center;
@@ -48,6 +45,7 @@ Nav.Other = styled.div`
 Nav.Title = styled.h1`
   margin: 0;
   padding: 0;
+  color: ${($) => $.theme.$color};
   font-size: ${($) => $.theme.$title};
   @media screen and (min-aspect-ratio: 1/1) {
     writing-mode: vertical-rl;
@@ -56,29 +54,28 @@ Nav.Title = styled.h1`
 `;
 
 Nav.Select = styled.select`
+  border: 0;
   margin: auto;
   text-align: center;
   vertical-align: center;
+  border-radius: ${($) => $.theme.$radius};
+  background: ${($) => $.theme.$background};
+  font-size: ${($) => $.theme.$font};
+  color: ${($) => $.theme.$color};
   @media screen and (min-aspect-ratio: ${($) => $.theme.$aspect}) {
     writing-mode: vertical-rl;
     text-orientation: upright;
   }
-  border: 0;
-  border-radius: ${($) => $.theme.$radius};
-  background: ${($) => darken(0.05, $.theme.$light)};
-  color: ${($) => lighten(0.05, $.theme.$dark)};
-  font-size: 2rem;
   > option {
     border: 0;
     font-size: 1rem;
   }
 `;
 
-function useCheckAttrs(props: {type: string, name: string}) {
-  props.type="checkbox"
-  props.name="checkbox"
-  return props
+function useCheckAttrs(props: { type: string; name: string }) {
+  props.type = "checkbox";
+  props.name = "checkbox";
+  return props;
 }
 
-Nav.Check = styled.input.attrs(useCheckAttrs)`
-`
+Nav.Check = styled.input.attrs(useCheckAttrs)``;

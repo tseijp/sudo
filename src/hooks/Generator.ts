@@ -14,16 +14,16 @@ export class Generator {
   }
 
   effect() {
-    const { discr, state: $ } = this._ctrl;
+    const { state: $ } = this._ctrl;
     if ($.isFirst) {
-      discr.clear();
+      $.discr.clear();
       this._ctrl.each((j) => {
         this._ctrl.each((i) => {
           const x = this._generate(i, j);
-          discr.set(x, this._ctrl.ij2m(i, j));
-          discr.set(x, this._ctrl.ij2m(i, $.nn - j));
-          discr.set(x, this._ctrl.ij2m($.nn - i, j));
-          discr.set(x, this._ctrl.ij2m($.nn - i, $.nn - j));
+          $.discr.set(x, this._ctrl.ij2m(i, j));
+          $.discr.set(x, this._ctrl.ij2m(i, $.nn - j));
+          $.discr.set(x, this._ctrl.ij2m($.nn - i, j));
+          $.discr.set(x, this._ctrl.ij2m($.nn - i, $.nn - j));
         });
       });
     }
@@ -31,7 +31,6 @@ export class Generator {
 
   private _generate(i = 0, j = 0) {
     const { state: $ } = this._ctrl;
-    const noise = abs((this._simplex.noise2D(i, j) * $.nn) << 0);
-    return $.toString(noise);
+    return abs((this._simplex.noise2D(i, j) * $.nn) << 0);
   }
 }

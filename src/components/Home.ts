@@ -1,40 +1,51 @@
 import { ReactNode, createElement as el } from "react";
-import styled, { css, createGlobalStyle, ThemeProvider } from "styled-components";
-import { lighten } from "polished";
-import { useControls } from "leva";
+import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
+// import { useControls } from "leva";
 
 export type ThemeProps = {
-  $dark: string;
-  $light: string;
-  $aspect: string;
+  onClick: any;
+  /**
+   * root setting
+   */
+  $isNum: boolean;
+  $isDark: boolean;
+  $isDebug: boolean;
+  $isBlind: boolean;
+  /**
+   * color
+   */
   $primary: string;
-  $steps: string;
+  $gray: string;
+  $blue: string;
+  $green: string;
+  $yellow: string;
+  $orange: string;
+  $color: string;
+  $background: string;
+  /**
+   * shape
+   */
+  $aspect: string;
   $radius: string;
   $margin: string;
   $gap: string;
   $font: string;
+  $hint: string;
   $nav: string;
   $title: string;
-  $test: string;
   $size: string;
-  $debug: boolean;
-}
-
-export const Home = (props: ThemeProps & { children: ReactNode }) => {
-  const { children, $debug, ...other } = props;
-  const theme = useControls(other as ThemeProps);
-  return el(ThemeProvider, { theme }, children);
 };
 
-export function debugStyle ($: { theme: ThemeProps }) {
-  if (!$.theme.$debug) return;
-  return css`
-    background: ${"#" + ((Math.random() * 0xffffff) | 0).toString(16)};
-  `;
-} 
+export const Home = (props: ThemeProps & { children: ReactNode }) => {
+  const { children, onClick, ...other } = props;
+  const theme = other as ThemeProps // useControls(other as ThemeProps, [$isDark]);
+  const _children = el(Home._Wrap, {onClick}, [el(Home._Style, {key: 0}), children])
+  return el(ThemeProvider, { theme }, _children);
+};
 
-Home.Wrap = styled.div`
-  position: fixed;
+Home._Wrap = styled.div`
+  position: absolute;
+  overflow-x: hidden;
   display: flex;
   border: "#000";
   top: 0;
@@ -52,7 +63,7 @@ Home.Wrap = styled.div`
   }
 `;
 
-Home.Style = createGlobalStyle<{ theme: ThemeProps }>`
+Home._Style = createGlobalStyle<{ theme: ThemeProps }>`
   html,
   body,
   #root {
@@ -65,7 +76,7 @@ Home.Style = createGlobalStyle<{ theme: ThemeProps }>`
   body {
     font-family: system-ui;
     margin: 0;
-    background: ${($) => lighten(0.02, $.theme.$dark)};
+    background: ${($) => $.theme.$background};
   }
 
   *,
