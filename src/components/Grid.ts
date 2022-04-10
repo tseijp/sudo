@@ -5,9 +5,6 @@ import { range } from "../utils";
 import * as styles from "./styles";
 
 export type GridProps = Partial<{
-  $isRelative: boolean;
-  $isPrimary: boolean;
-  $isEqual: boolean;
   $right: boolean;
   $left: boolean;
   $nav: boolean;

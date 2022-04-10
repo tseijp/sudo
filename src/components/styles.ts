@@ -1,39 +1,43 @@
 import { css } from "styled-components"
 import { GridProps } from "./Grid";
-import { ThemeProps } from "./Home"
+import { BoxProps } from "./Box";
+import { ThemeProps } from "./Home";
 
 /**
  * each debug styles
  */
 export function debugStyle($: { theme: ThemeProps }) {
-  if ($.theme.$isDebug)
-    return css`
-      background: ${"#" + ((Math.random() * 0xffffff) | 0).toString(16)};
-    `;
+  if ($.theme.$isDebug) return css`
+    background: ${"#" + ((Math.random() * 0xffffff) | 0).toString(16)};
+  `;
 }
 
 /**
  * Box styles
  */
-export function relativeBoxStyle($: GridProps & { theme: ThemeProps }) {
-  if (!$.$isRelative) return;
-  return css`
+export function relativeBoxStyle($: BoxProps & { theme: ThemeProps }) {
+  if ($.$isRelative) return css`
     background: ${$.theme.$gray};
     transition: 0.25s;
   `;
 }
 
-export function primaryBoxStyle($: GridProps & { theme: ThemeProps }) {
-  if(!$.$isPrimary) return;
-  return css`
+export function primaryBoxStyle($: BoxProps & { theme: ThemeProps }) {
+  if($.$isPrimary) return css`
     border-color: ${$.theme.$primary};
   `
 }
 
-export function equalBoxStyle($: GridProps & { theme: ThemeProps }) {
-  if (!$.$isEqual) return;
-  return css`
+export function equalBoxStyle($: BoxProps & { theme: ThemeProps }) {
+  if($.$isEqual) return css`
     background: ${$.theme.$yellow};
+  `;
+}
+
+export function endBoxStyle($: BoxProps & { theme: ThemeProps }) {
+  if($.$end) return css`
+    font-size: ${$.theme.$hint};
+    border: none;
   `;
 }
 
@@ -41,22 +45,20 @@ export function equalBoxStyle($: GridProps & { theme: ThemeProps }) {
  * Grid Style
  */
 export function topGridStyle($: GridProps & { theme: ThemeProps }) {
-  if (!$.$top) return;
-  return css`
+  if ($.$top) return css`
     /**
      * can not work using width and height key
-    */
+     */
     min-width: ${$.theme.$size};
-    max-width: ${$.theme.$size};
     min-height: ${$.theme.$size};
+    max-width: ${$.theme.$size};
     max-height: ${$.theme.$size};
     padding: calc(2 * ${$.theme.$gap});
   `;
 }
 
 export function oneGridStyle($: GridProps & { theme: ThemeProps }) {
-  if (!$.$one) return;
-  return css`
+  if ($.$one) return css`
     background: none;
     @media screen and (${($) => $.theme.$aspect}) {
       grid-auto-flow: column;
@@ -65,8 +67,7 @@ export function oneGridStyle($: GridProps & { theme: ThemeProps }) {
 }
 
 export function endGridStyle($: GridProps & { theme: ThemeProps }) {
-  if (!$.$end) return;
-  return css`
+  if ($.$end) return css`
     width: 100%;
     height: 100%;
     border: none;

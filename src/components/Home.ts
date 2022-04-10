@@ -3,6 +3,7 @@ import styled, { createGlobalStyle, ThemeProvider } from "styled-components";
 // import { useControls } from "leva";
 
 export type ThemeProps = {
+  onClick: any;
   /**
    * root setting
    */
@@ -29,19 +30,16 @@ export type ThemeProps = {
   $margin: string;
   $gap: string;
   $font: string;
+  $hint: string;
   $nav: string;
   $title: string;
   $size: string;
 };
 
 export const Home = (props: ThemeProps & { children: ReactNode }) => {
-  const { children, $isNum, $isDark, $isBlind, $isDebug, ...other } = props;
+  const { children, onClick, ...other } = props;
   const theme = other as ThemeProps // useControls(other as ThemeProps, [$isDark]);
-  theme.$isNum = $isNum
-  theme.$isDark = $isDark
-  theme.$isBlind = $isBlind
-  theme.$isDebug = $isDebug
-  const _children = el(Home._Wrap, {}, [el(Home._Style, {key: 0}), children])
+  const _children = el(Home._Wrap, {onClick}, [el(Home._Style, {key: 0}), children])
   return el(ThemeProvider, { theme }, _children);
 };
 

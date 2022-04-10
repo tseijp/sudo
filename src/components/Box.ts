@@ -4,7 +4,9 @@ import * as styles from "./styles";
 
 export type BoxProps = Partial<{
   $isRelative: boolean;
+  $isPrimary: boolean;
   $isEqual: boolean;
+  $end: boolean;
   $i: string | number;
   $j: string | number;
   $s: string | number;
@@ -41,6 +43,7 @@ Box.Wrap = styled.div<BoxProps>`
   ${styles.relativeBoxStyle}
   ${styles.primaryBoxStyle}
   ${styles.equalBoxStyle}
+  ${styles.endBoxStyle}
   ${styles.debugStyle}
 `;
 

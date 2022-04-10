@@ -46,7 +46,7 @@ Nav.Title = styled.h1`
   margin: 0;
   padding: 0;
   color: ${($) => $.theme.$color};
-  font-size: ${($) => $.theme.$font};
+  font-size: ${($) => $.theme.$title};
   @media screen and (min-aspect-ratio: 1/1) {
     writing-mode: vertical-rl;
     text-orientation: upright;
@@ -54,18 +54,18 @@ Nav.Title = styled.h1`
 `;
 
 Nav.Select = styled.select`
+  border: 0;
   margin: auto;
   text-align: center;
   vertical-align: center;
+  border-radius: ${($) => $.theme.$radius};
+  background: ${($) => $.theme.$background};
+  font-size: ${($) => $.theme.$font};
+  color: ${($) => $.theme.$color};
   @media screen and (min-aspect-ratio: ${($) => $.theme.$aspect}) {
     writing-mode: vertical-rl;
     text-orientation: upright;
   }
-  border: 0;
-  border-radius: ${($) => $.theme.$radius};
-  background: ${($) => $.theme.$background};
-  color: ${($) => $.theme.$color};
-  font-size: 2rem;
   > option {
     border: 0;
     font-size: 1rem;

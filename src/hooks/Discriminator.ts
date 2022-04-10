@@ -11,10 +11,10 @@ export class Discriminator {
    * _2 is Set for _grid group
    */
   private _ctrl: Controller;
-  private _m = new Map<number, string>();
-  private _0: Set<string>[] = [];
-  private _1: Set<string>[] = [];
-  private _2: Set<string>[] = [];
+  private _m = new Map<number, number>();
+  private _0: Set<number>[] = [];
+  private _1: Set<number>[] = [];
+  private _2: Set<number>[] = [];
 
   constructor(ctrl: Controller) {
     this._ctrl = ctrl;
@@ -29,7 +29,7 @@ export class Discriminator {
 
   get(k = 0, l = -1, m = k) {
     if (!!~l) m = this._ctrl.kl2m(k, l); // l was not -1 and existing
-    return this._m.get(m) || "0";
+    return this._m.get(m) || 0; // TODO DEBUG
   }
 
   size(...args: Args) {
@@ -37,7 +37,7 @@ export class Discriminator {
     return [this._col(i).size, this._row(j).size, this._grid(k).size];
   }
 
-  set(x = "1", ...args: Args) {
+  set(x = 0, ...args: Args) {
     const [i, j, k, , m] = this._klm2(...args);
     if(!this.has(x, ...args)) {
       this._m.set(m, x);
@@ -54,7 +54,7 @@ export class Discriminator {
     }
   }
 
-  has(x = "1", ...args: Args) {
+  has(x = 1, ...args: Args) {
     let [i, j, k, , m] = this._klm2(...args);
     if (this._m.get(m) === x) return true;
     return this._col(i).has(x) || this._row(j).has(x) || this._grid(k).has(x);
@@ -83,15 +83,16 @@ export class Discriminator {
   }
 
   private _create(fun = (i = 0) => i) {
-    const set = new Set<string>();
+    const set = new Set<number>();
     this._ctrl.each((i) => void set.add(this._m.get(fun(i))!));
     return set;
   }
 
-  private _klm2(k = 0, l = -1, m = k) {
+  _klm2(k = 0, l = -1, m = k) {
     if (!!~l) m = this._ctrl.kl2m(k, l); // l was not -1 and existing
     else [k, l] = this._ctrl.m2kl(m)     // l was -1 and not existing
     const [i, j] = this._ctrl.m2ij(m)
-    return [i, j, k, l, m]
+    const x = this._m.get(m) || 0 // @TODO DEBUG
+    return [i, j, k, l, m, x]
   }
 }
