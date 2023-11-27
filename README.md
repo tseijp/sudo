@@ -1,4 +1,4 @@
-# 🔡@tsei/sudo
+# 🔡sudo
 
 <div align="center">
 
@@ -9,7 +9,7 @@
 [![][license-img]][license]
 
   <a href="https://tseijp.github.io/sudo/">
-    <img src="https://i.imgur.com/H1ODA6L.gif" width="600" alt="⚙" />
+    <img alt="⚙" width="600px" src="https://i.imgur.com/H1ODA6L.gif" />
   </a>
 </div>
 
